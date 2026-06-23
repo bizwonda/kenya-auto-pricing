@@ -1,11 +1,10 @@
 name: Deploy API
 
+# Disabled until you connect Railway/Render
+# Uncomment and add secrets when ready to deploy
+
 on:
-  push:
-    branches: [main]
-    paths-ignore:
-      - "data/listings/**"
-      - "data/model_metrics.json"
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -15,15 +14,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Deploy to Railway
-        if: ${{ false }}  # Enable after connecting Railway
-        uses: railwayapp/cli@latest
-        with:
-          args: up --service kenya-auto-pricing --detach
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      - name: Deploy placeholder
+        run: echo "Add RAILWAY_TOKEN or RENDER_DEPLOY_HOOK secret, uncomment below"
 
-      - name: Deploy to Render
-        if: ${{ false }}  # Enable after connecting Render
-        run: |
-          curl -X POST "https://api.render.com/deploy/${{ secrets.RENDER_DEPLOY_HOOK }}"
+      # - name: Deploy to Railway
+      #   uses: railwayapp/cli@latest
+      #   with:
+      #     args: up --service kenya-auto-pricing --detach
+      #   env:
+      #     RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
+      # - name: Deploy to Render
+      #   run: |
+      #     curl -X POST "https://api.render.com/deploy/${{ secrets.RENDER_DEPLOY_HOOK }}"
