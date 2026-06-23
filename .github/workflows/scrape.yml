@@ -1,0 +1,48 @@
+name: Scrape Vehicle Data
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+    inputs:
+      models:
+        description: "Comma-separated make:model pairs (blank = all popular)"
+        required: false
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install httpx beautifulsoup4 lxml loguru
+
+      - name: Scrape vehicle data
+        env:
+          PROXY_URL: ${{ secrets.PROXY_URL }}
+          SEARCH_QUERIES: ${{ github.event.inputs.models || '' }}
+          PYTHONPATH: ${{ github.workspace }}
+        run: python .github/scripts/scrape.py
+
+      - name: Commit scraped data
+        run: |
+          git config user.name "Kenya Auto Pricing Bot"
+          git config user.email "bot@kenyacarpricing.com"
+          if [ -n "$(git status data/listings --porcelain 2>/dev/null)" ]; then
+            git add data/listings/
+            git commit -m "📊 Scrape: $(date -u +'%Y-%m-%d %H:%M UTC')"
+            git push
+            echo "Data committed"
+          else
+            echo "No new data"
+          fi

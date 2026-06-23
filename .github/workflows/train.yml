@@ -1,0 +1,104 @@
+name: Train Pricing Model
+
+on:
+  workflow_run:
+    workflows: ["Scrape Vehicle Data"]
+    types: [completed]
+  workflow_dispatch:
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install pandas numpy xgboost scikit-learn category-encoders loguru
+
+      - name: Train model
+        run: |
+          python -c "
+          import json, os, glob, sys
+          import pandas as pd
+          import numpy as np
+          from datetime import datetime, timedelta
+          
+          sys.path.insert(0, '.')
+          
+          # Load all scraped data
+          json_files = sorted(glob.glob('data/listings/scrape_*.json'))
+          if not json_files:
+              print('No data files found — skipping training')
+              exit(0)
+          
+          # Load recent files only (last 30 days)
+          cutoff = datetime.utcnow() - timedelta(days=30)
+          all_records = []
+          for f in json_files:
+              try:
+                  ts_str = f.split('scrape_')[-1].replace('.json', '')
+                  ts = datetime.strptime(ts_str, '%Y%m%d_%H%M%S')
+                  if ts < cutoff:
+                      continue
+              except:
+                  pass
+              with open(f) as fh:
+                  records = json.load(fh)
+                  all_records.extend(records)
+          
+          if not all_records:
+              print('No recent data — skipping')
+              exit(0)
+          
+          df = pd.DataFrame(all_records)
+          print(f'Loaded {len(df)} records from {len(json_files)} files')
+          
+          # Keep only records with price data
+          df_with_price = df[df['price_kes'].notna()].copy()
+          print(f'Records with KES price: {len(df_with_price)}')
+          
+          if len(df_with_price) < 30:
+              print(f'Only {len(df_with_price)} priced records — need 30+ for training, skipping')
+              exit(0)
+          
+          # Train model
+          from src.model.train import VehiclePricingModel
+          from src.pipeline.cleaner import DataCleaner
+          
+          df_clean = DataCleaner.clean_listings(df_with_price.to_dict('records'))
+          
+          model = VehiclePricingModel(model_path='models/xgb_pricing_v1.json')
+          metrics = model.train(df_clean)
+          
+          # Save latest model metrics
+          os.makedirs('data', exist_ok=True)
+          with open('data/model_metrics.json', 'w') as f:
+              json.dump(metrics, f, indent=2, default=str)
+          
+          print(f'Training complete — MAE: KES {metrics[\"mae\"]:,.0f}, R²: {metrics[\"r2\"]:.3f}')
+          " 2>&1
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+
+      - name: Commit trained model
+        run: |
+          git config user.name "Kenya Auto Pricing Bot"
+          git config user.email "bot@kenyacarpricing.com"
+          
+          if [ -n "$(git status models/ data/model_metrics.json --porcelain)" ]; then
+            git add models/ data/model_metrics.json
+            git commit -m "🤖 Model retrained — MAE: $(python -c "import json; m=json.load(open('data/model_metrics.json')); print(f'{m[\"mae\"]:,.0f}')") KES"
+            git push
+            echo "Model committed"
+          else
+            echo "Model unchanged"
+          fi

@@ -1,0 +1,15 @@
+[Unit]
+Description=Kenya Auto Pricing API
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+User=carpricing
+WorkingDirectory=/opt/kenya-auto-pricing
+Environment=PATH=/opt/kenya-auto-pricing/venv/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=/opt/kenya-auto-pricing/venv/bin/uvicorn src.api.main:app --host 0.0.0.0 --port 8000
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
