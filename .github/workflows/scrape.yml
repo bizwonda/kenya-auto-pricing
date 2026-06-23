@@ -9,6 +9,9 @@ on:
         description: "Comma-separated make:model pairs (blank = all popular)"
         required: false
 
+permissions:
+  contents: write
+
 jobs:
   scrape:
     runs-on: ubuntu-latest
@@ -25,7 +28,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        run: pip install httpx beautifulsoup4 lxml loguru
+        run: pip install httpx beautifulsoup4 lxml loguru tenacity
 
       - name: Scrape vehicle data
         env:
