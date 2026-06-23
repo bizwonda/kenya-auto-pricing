@@ -78,6 +78,9 @@ class KenyaMarketScraper(BaseScraper):
         listings = []
         try:
             soup = self._soup(self.CHEKI_SEARCH, params)
+            if soup is None:
+                logger.warning("Cheki blocked or unreachable")
+                return []
             cars = soup.select(
                 ".listing-item, .car-card, .vehicle-listing, "
                 "[class*='listing'], [class*='car-card'], article"
@@ -118,6 +121,9 @@ class KenyaMarketScraper(BaseScraper):
         listings = []
         try:
             soup = self._soup(url, params if params else None)
+            if soup is None:
+                logger.warning("Jiji blocked or unreachable")
+                return []
             cars = soup.select(
                 ".b-list-advert__item, .b-advert-list-item, "
                 "[class*='advert'], [data-ad-id], .qa-advert-list-item"
@@ -150,6 +156,9 @@ class KenyaMarketScraper(BaseScraper):
         listings = []
         try:
             soup = self._soup(self.PIGIAME_SEARCH, params)
+            if soup is None:
+                logger.warning("PigiaMe blocked or unreachable")
+                return []
             cars = soup.select(
                 ".listing-card, .item-card, [class*='listing-card'], "
                 "[class*='product-card'], .ad-item"

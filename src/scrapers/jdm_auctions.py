@@ -89,6 +89,9 @@ class JDMAuctionScraper(BaseScraper):
         listings = []
         try:
             soup = self._soup(self.SBT_SEARCH, params)
+            if soup is None:
+                logger.warning(f"SBT blocked or unreachable")
+                return []
             cars = soup.select(".car-list-item, .vehicle-card, [class*='car-item']")
 
             for car in cars:
@@ -226,6 +229,10 @@ class JDMAuctionScraper(BaseScraper):
 
     def get_detail(self, listing_id: str) -> VehicleListing:
         soup = self._soup(f"{self.SBT_URL}/car/{listing_id}")
+        if soup is None:
+            return VehicleListing(
+                source="sbt_japan", source_id=listing_id, url="", make="Unknown", model="Unknown"
+            )
         # Detail page parsing — often richer than listing page
         # Reuse _parse_sbt_car on the detail page
         fake_element = soup.find("body")
