@@ -1,0 +1,46 @@
+{
+  "manifest_version": 3,
+  "name": "Kenya Auto Pricing Scraper",
+  "version": "1.0.0",
+  "description": "Collects used car listings from Kenyan and JDM sites as you browse. Powers the Kenya Auto Pricing API.",
+  "permissions": ["storage", "activeTab"],
+  "host_permissions": [
+    "https://cheki.co.ke/*",
+    "https://www.cheki.co.ke/*",
+    "https://jiji.co.ke/*",
+    "https://www.jiji.co.ke/*",
+    "https://www.pigiame.co.ke/*",
+    "https://pigiame.co.ke/*",
+    "https://sbtjapan.com/*",
+    "https://www.sbtjapan.com/*",
+    "https://www.tradecarview.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://cheki.co.ke/*",
+        "https://www.cheki.co.ke/*",
+        "https://jiji.co.ke/*",
+        "https://www.jiji.co.ke/*",
+        "https://www.pigiame.co.ke/*",
+        "https://pigiame.co.ke/*",
+        "https://sbtjapan.com/*",
+        "https://www.sbtjapan.com/*",
+        "https://www.tradecarview.com/*"
+      ],
+      "js": ["lib/parser.js", "content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Kenya Auto Pricer"
+  },
+  "icons": {
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
