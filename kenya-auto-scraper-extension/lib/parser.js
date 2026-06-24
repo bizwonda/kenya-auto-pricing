@@ -60,20 +60,91 @@ const PARSERS = {
 
   sbt: {
     name: "SBT Japan",
+    // SBT uses dynamic rendering — cards appear after JS loads
     listingSelector: [
-      ".car-list-item", ".vehicle-card", "[class*='car-item']",
-      "[class*='vehicle-list'] > div", ".stock-list-item",
-      ".car-box", ".vehicle-box", "tr[class*='car']"
+      // Common SBT card patterns
+      ".car-list-item", ".vehicle-card", ".stock-list-item",
+      "[class*='car-item']", "[class*='vehicle-item']", "[class*='stock-item']",
+      "[class*='car-card']", "[class*='vehicle-card']", "[class*='stock-card']",
+      "[class*='car-box']", "[class*='vehicle-box']", "[class*='stock-box']",
+      // Grid/list children
+      ".car-list > div", ".vehicle-list > div", ".stock-list > div",
+      ".search-result-list > div", ".search-results > div",
+      // Generic card patterns SBT might use
+      "[class*='product-card']", "[class*='product-item']",
+      "[class*='inventory-card']", "[class*='inventory-item']",
+      // Table rows
+      "tr[class*='car']", "tr[class*='stock']", "tr[class*='vehicle']",
+      // SBT-specific: items with car detail links
+      "a[href*='/used-cars/stock/']", "a[href*='/car-detail/']",
+      "a[href*='/stock/']",
+      // Very generic: divs containing car makes (fallback)
+      "div[class*='item']", "div[class*='card']"
     ],
     fields: {
-      title: ["h2", "h3", ".car-name", ".vehicle-name", "[class*='title']", "[class*='name']"],
-      price: [".price", "[class*='price']", ".fob-price", ".car-price", "[class*='amount']"],
-      year: [".year", "[class*='year']", ".mfgyear", ".model-year"],
-      mileage: [".mileage", "[class*='mileage']", "[class*='odo']", "[class*='km']"],
-      engine: [".engine", "[class*='engine']", "[class*='cc']"],
-      transmission: [".transmission", "[class*='transmission']"],
-      location: [".location", "[class*='location']", ".port"],
-      url: ["a[href*='/car/']", "a[href*='/stock/']", "a[href*='/vehicle/']", "a[href*='/detail/']"]
+      // SBT typically shows title as uppercase MAKE MODEL YEAR
+      title: [
+        "h2", "h3", "h4", "h5",
+        ".car-name", ".vehicle-name", ".stock-name",
+        ".car-title", ".vehicle-title", ".stock-title",
+        "[class*='car-name']", "[class*='vehicle-name']", "[class*='stock-name']",
+        "[class*='title']", "[class*='name']",
+        ".listing-title", ".item-title",
+        // SBT may use strong/b tags for car names
+        "strong", "b",
+        // Link text itself often contains the car name
+        "a[href*='/used-cars/stock/']", "a[href*='/stock/']", "a[href*='/car-detail/']"
+      ],
+      price: [
+        ".price", "[class*='price']", ".fob-price", ".car-price",
+        "[class*='amount']", "[class*='fob']",
+        ".vehicle-price", ".stock-price", ".listing-price",
+        "[class*='vehicle-price']", "[class*='stock-price']",
+        // SBT often shows price in a highlighted span
+        "span[class*='price']", "div[class*='price']",
+        ".currency", "[class*='currency']",
+        // Price near "FOB" or "USD" text
+        ".fob", "[class*='fob']"
+      ],
+      year: [
+        ".year", "[class*='year']", ".mfgyear", ".model-year",
+        "[class*='mfg']", "[class*='model-year']",
+        ".vehicle-year", ".stock-year",
+        // SBT specs often in a list/dl
+        ".specs .year", "dl dt:contains('Year') + dd",
+        "li:contains('Year')", "td:contains('Year') + td"
+      ],
+      mileage: [
+        ".mileage", "[class*='mileage']", "[class*='odo']", "[class*='km']",
+        ".vehicle-mileage", ".stock-mileage",
+        "li:contains('Mileage')", "li:contains('km')",
+        "td:contains('Mileage') + td", "td:contains('km') + td",
+        "dl dt:contains('Mileage') + dd", "dl dt:contains('Odometer') + dd"
+      ],
+      engine: [
+        ".engine", "[class*='engine']", "[class*='cc']",
+        ".engine-size", ".engine-capacity",
+        "li:contains('Engine')", "td:contains('Engine') + td",
+        "dl dt:contains('Engine') + dd", "dl dt:contains('cc') + dd",
+        "li:contains('cc')", "td:contains('cc') + td"
+      ],
+      transmission: [
+        ".transmission", "[class*='transmission']", "[class*='trans']",
+        "li:contains('Transmission')", "td:contains('Transmission') + td",
+        "dl dt:contains('Transmission') + dd"
+      ],
+      location: [
+        ".location", "[class*='location']", ".port",
+        ".yard", "[class*='yard']", "[class*='port']",
+        "li:contains('Location')", "td:contains('Location') + td"
+      ],
+      url: [
+        "a[href*='/used-cars/stock/']", "a[href*='/stock/']",
+        "a[href*='/car-detail/']", "a[href*='/vehicle/']",
+        "a[href*='/car/']", "a[href*='/detail/']",
+        // If the card itself is a link
+        "a[href*='sbtjapan.com']"
+      ]
     }
   },
 
@@ -116,13 +187,95 @@ function detectSource(url) {
 
 function extractText(el, selectors) {
   for (const sel of selectors) {
-    const found = el.querySelector(sel);
-    if (found) {
-      const text = found.textContent.trim();
-      if (text && text.length < 200) return text;
+    // Handle :contains() pseudo-selector (not native CSS)
+    if (sel.includes(":contains(")) {
+      const text = extractByContains(el, sel);
+      if (text) return text;
+      continue;
+    }
+    try {
+      const found = el.querySelector(sel);
+      if (found) {
+        const text = found.textContent.trim();
+        if (text && text.length < 200) return text;
+      }
+    } catch (e) {
+      // Invalid selector, skip
     }
   }
   return null;
+}
+
+// Extract text using label:value pattern (e.g., "Year: 2019" in li/td/dt+dd)
+function extractByContains(el, selector) {
+  // Parse: "li:contains('Year')" or "td:contains('Year') + td" or "dl dt:contains('Year') + dd"
+  const match = selector.match(/^([a-z]+)(?:\.([\w-]+))?:contains\(['"](.+?)['"]\)(?:\s*\+\s*([a-z]+))?$/);
+  if (!match) return null;
+  
+  const [, tag, className, searchText, siblingTag] = match;
+  const searchLower = searchText.toLowerCase();
+  
+  // Find elements matching tag that contain the search text
+  const els = el.querySelectorAll(tag);
+  for (const e of els) {
+    if (e.textContent.toLowerCase().includes(searchLower)) {
+      // If looking for sibling (e.g., td:contains('Year') + td)
+      if (siblingTag) {
+        let sib = e.nextElementSibling;
+        while (sib) {
+          if (sib.tagName.toLowerCase() === siblingTag) {
+            return sib.textContent.trim();
+          }
+          sib = sib.nextElementSibling;
+        }
+      } else {
+        // Extract value after the label text
+        const text = e.textContent.trim();
+        // "Year: 2019" → "2019", "Year 2019" → "2019"
+        const after = text.substring(text.toLowerCase().indexOf(searchLower) + searchLower.length);
+        return after.replace(/^[\s:：]+/, "").trim();
+      }
+    }
+  }
+  return null;
+}
+
+// SBT-specific: extract specs from the full text content
+function extractSpecsFromText(el) {
+  const text = el.textContent || "";
+  const specs = {};
+  
+  // Year: look for 4-digit year starting with 19 or 20
+  const yearMatch = text.match(/\b(19\d{2}|20\d{2})\b/);
+  if (yearMatch) specs.year = parseInt(yearMatch[1]);
+  
+  // Mileage: number followed by km
+  const mileMatch = text.match(/([\d,]+)\s*km/i);
+  if (mileMatch) specs.mileage_km = parseInt(mileMatch[1].replace(/,/g, ""));
+  
+  // Engine: number followed by cc
+  const engMatch = text.match(/([\d,]+)\s*cc/i);
+  if (engMatch) specs.engine_cc = parseInt(engMatch[1].replace(/,/g, ""));
+  
+  // Transmission
+  if (/automatic|\bauto\b|cvt/i.test(text)) specs.transmission = "automatic";
+  else if (/manual|\bmt\b/i.test(text)) specs.transmission = "manual";
+  
+  // Price: USD or KES
+  const usdMatch = text.match(/\$\s*([\d,]+)/);
+  if (usdMatch) specs.price_usd = parseFloat(usdMatch[1].replace(/,/g, ""));
+  
+  const kesMatch = text.match(/KES?\s*([\d,]+)/i);
+  if (kesMatch) specs.price_kes = parseFloat(kesMatch[1].replace(/,/g, ""));
+  
+  const jpyMatch = text.match(/[¥￥]\s*([\d,]+)/);
+  if (jpyMatch) specs.price_jpy = parseFloat(jpyMatch[1].replace(/,/g, ""));
+  
+  // FOB price
+  const fobMatch = text.match(/FOB\s*[:]?\s*\$?\s*([\d,]+)/i);
+  if (fobMatch && !specs.price_usd) specs.price_usd = parseFloat(fobMatch[1].replace(/,/g, ""));
+  
+  return specs;
 }
 
 function extractUrl(el, selectors, baseUrl) {
@@ -217,37 +370,35 @@ function parseListing(el, sourceKey, baseUrl) {
   if (!title || title.length < 3) return null;
 
   const { make, model } = extractMakeModel(title);
+  if (!make) return null; // Skip if no recognized car make
+
   const priceText = extractText(el, parser.fields.price);
   const { price_kes, price_usd } = parsePrice(priceText);
   
   const yearText = extractText(el, parser.fields.year);
-  const year = parseYear(yearText || title);
-
   const mileageText = extractText(el, parser.fields.mileage);
-  const mileage_km = parseMileage(mileageText || el.textContent);
-
   const engineText = extractText(el, parser.fields.engine);
-  const engine_cc = parseEngine(engineText || el.textContent);
-
   const transText = extractText(el, parser.fields.transmission);
-  const transmission = parseTransmission(transText || el.textContent);
-
   const location = extractText(el, parser.fields.location);
   const url = extractUrl(el, parser.fields.url, baseUrl);
+
+  // Fallback: extract specs from full element text
+  const textSpecs = extractSpecsFromText(el);
 
   return {
     source: parser.name,
     source_key: sourceKey,
     url: url || baseUrl,
-    make: make || "Unknown",
+    make: make,
     model: model || "Unknown",
-    year,
-    mileage_km,
-    engine_cc,
-    transmission,
-    price_kes,
-    price_usd,
-    location,
+    year: parseYear(yearText || title) || textSpecs.year,
+    mileage_km: parseMileage(mileageText) || textSpecs.mileage_km,
+    engine_cc: parseEngine(engineText) || textSpecs.engine_cc,
+    transmission: parseTransmission(transText) || textSpecs.transmission,
+    price_kes: price_kes || textSpecs.price_kes,
+    price_usd: price_usd || textSpecs.price_usd,
+    price_jpy: textSpecs.price_jpy,
+    location: location,
     title: title.substring(0, 100),
     scraped_at: new Date().toISOString(),
   };
