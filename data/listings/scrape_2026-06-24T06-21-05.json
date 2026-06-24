@@ -1,0 +1,145 @@
+[
+  {
+    "location": null,
+    "make": "Mazda",
+    "model": "CX5",
+    "scraped_at": "2026-06-24T06:00:58.875Z",
+    "source": "SBT Japan",
+    "source_key": "sbt",
+    "title": "MAZDA\n                        \n                            CX5\n                            (1,765)",
+    "url": "https://www.sbtjapan.com/used-cars/search?make_id%5B%5D=2&model%5B%5D=CAMRY%2CCOROLLA+AXIO%2CCOROLLA+FIELDER&year__from=2020&is_new_available=0&country=26&port=52&shipment=1&currency=usd&freight=0&inspection=yes&insurance=yes&s=manufacture_year"
+  },
+  {
+    "location": null,
+    "make": "Toyota",
+    "model": "Unknown",
+    "scraped_at": "2026-06-24T06:03:01.577Z",
+    "source": "SBT Japan",
+    "source_key": "sbt",
+    "title": "TOYOTA",
+    "url": "https://www.sbtjapan.com/"
+  },
+  {
+    "location": null,
+    "make": "Mazda",
+    "model": "CX5",
+    "scraped_at": "2026-06-24T06:03:14.729Z",
+    "source": "SBT Japan",
+    "source_key": "sbt",
+    "title": "MAZDA\n                        \n                            CX5\n                            (1,765)",
+    "url": "https://www.sbtjapan.com/used-cars/search?make_id=5&model%5B%5D=CX5&isModel=1"
+  },
+  {
+    "location": null,
+    "make": "Mazda",
+    "model": "CX5",
+    "scraped_at": "2026-06-24T06:03:41.117Z",
+    "source": "SBT Japan",
+    "source_key": "sbt",
+    "title": "MAZDA\n                        \n                            CX5\n                            (1,765)",
+    "url": "https://www.sbtjapan.com/used-cars/search?make_id%5B%5D=5&model%5B%5D=CX5&year__from=2020&is_new_available=0&country=26&port=52&shipment=1&currency=usd&freight=0&inspection=yes&insurance=yes&isModel=1"
+  },
+  {
+    "location": null,
+    "make": "Mazda",
+    "model": "CX5",
+    "scraped_at": "2026-06-24T06:08:07.983Z",
+    "source": "SBT Japan",
+    "source_key": "sbt",
+    "title": "MAZDA\n                        \n                            CX5\n                            (1,765)",
+    "url": "https://www.sbtjapan.com/used-cars"
+  },
+  {
+    "location": null,
+    "make": "Mazda",
+    "model": "CX5",
+    "scraped_at": "2026-06-24T06:08:20.618Z",
+    "source": "SBT Japan",
+    "source_key": "sbt",
+    "title": "MAZDA\n                        \n                            CX5\n                            (1,765)",
+    "url": "https://www.sbtjapan.com/used-cars/search?make_id=4&model%5B%5D=VEZEL&isModel=1"
+  },
+  {
+    "location": null,
+    "make": "Honda",
+    "model": "Reviews",
+    "price_usd": 113,
+    "scraped_at": "2026-06-24T06:10:33.221Z",
+    "source": "SBT Japan",
+    "source_key": "sbt",
+    "title": "Reviews on honda vezel",
+    "url": "https://www.yotpo.com/?utm_campaign=branding_link_reviews_widget_v2&utm_medium=widget&utm_source=sbtjapan.com",
+    "year": 2020
+  },
+  {
+    "location": null,
+    "make": "Honda",
+    "model": "bought",
+    "scraped_at": "2026-06-24T06:10:37.822Z",
+    "source": "SBT Japan",
+    "source_key": "sbt",
+    "title": "I bought a Honda Vezel",
+    "url": "https://www.sbtjapan.com/used-cars/AK8054",
+    "year": 2022
+  },
+  {
+    "location": null,
+    "make": "Mazda",
+    "model": "CX5",
+    "scraped_at": "2026-06-24T06:11:42.146Z",
+    "source": "SBT Japan",
+    "source_key": "sbt",
+    "title": "MAZDA\n                        \n                            CX5\n                            (1,765)",
+    "url": "https://www.sbtjapan.com/used-cars/search?make_id=2&model%5B%5D=LAND%20CRUISER%20PRADO&isModel=1"
+  },
+  {
+    "location": null,
+    "make": "Mazda",
+    "model": "CX5",
+    "scraped_at": "2026-06-24T06:12:59.997Z",
+    "source": "SBT Japan",
+    "source_key": "sbt",
+    "title": "MAZDA\n                        \n                            CX5\n                            (1,765)",
+    "url": "https://www.sbtjapan.com/used-cars/search?make_id%5B%5D=2&model%5B%5D=LAND+CRUISER+PRADO&year__from=2020&is_new_available=0&country=26&port=52&shipment=1&currency=usd&freight=0&inspection=yes&insurance=yes&isModel=1"
+  },
+  {
+    "location": null,
+    "make": "Mazda",
+    "model": "CX5",
+    "scraped_at": "2026-06-24T06:14:17.374Z",
+    "source": "SBT Japan",
+    "source_key": "sbt",
+    "title": "MAZDA\n                        \n                            CX5\n                            (1,765)",
+    "url": "https://www.sbtjapan.com/used-cars/search?make_id%5B%5D=2&model%5B%5D=FJ+CRUISER%2CLAND+CRUISER+FJ%2CLAND+CRUISER+PRADO&year__from=2020&is_new_available=0&country=26&port=52&shipment=1&currency=usd&freight=0&inspection=yes&insurance=yes&isModel=1"
+  },
+  {
+    "location": null,
+    "make": "Mazda",
+    "model": "CX5",
+    "scraped_at": "2026-06-24T06:16:06.429Z",
+    "source": "SBT Japan",
+    "source_key": "sbt",
+    "title": "MAZDA\n                        \n                            CX5\n                            (1,765)",
+    "url": "https://www.sbtjapan.com/used-cars/search?make_id=2&body_type=SUV"
+  },
+  {
+    "location": null,
+    "make": "Mazda",
+    "model": "CX5",
+    "scraped_at": "2026-06-24T06:16:17.161Z",
+    "source": "SBT Japan",
+    "source_key": "sbt",
+    "title": "MAZDA\n                        \n                            CX5\n                            (1,765)",
+    "url": "https://www.sbtjapan.com/used-cars/search?make_id%5B%5D=2&body_type=SUV&year__from=2020&is_new_available=0&country=26&port=52&shipment=1&currency=usd&freight=0&inspection=yes&insurance=yes"
+  },
+  {
+    "location": null,
+    "make": "Mazda",
+    "model": "CX5",
+    "scraped_at": "2026-06-24T06:20:00.294Z",
+    "source": "SBT Japan",
+    "source_key": "sbt",
+    "title": "MAZDA\n                        \n                            CX5\n                            (1,765)",
+    "url": "https://www.sbtjapan.com/used-cars/search?make_id%5B%5D=2&model%5B%5D=HARRIER+PHEV%2CHIGHLANDER%2CHILUX&body_type=SUV&year__from=2020&is_new_available=0&country=26&port=52&shipment=1&currency=usd&freight=0&inspection=yes&insurance=yes"
+  }
+]
