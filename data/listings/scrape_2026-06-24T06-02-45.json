@@ -1,0 +1,12 @@
+[
+  {
+    "location": null,
+    "make": "Mazda",
+    "model": "CX5",
+    "scraped_at": "2026-06-24T06:00:58.875Z",
+    "source": "SBT Japan",
+    "source_key": "sbt",
+    "title": "MAZDA\n                        \n                            CX5\n                            (1,765)",
+    "url": "https://www.sbtjapan.com/used-cars/search?make_id%5B%5D=2&model%5B%5D=CAMRY%2CCOROLLA+AXIO%2CCOROLLA+FIELDER&year__from=2020&is_new_available=0&country=26&port=52&shipment=1&currency=usd&freight=0&inspection=yes&insurance=yes&s=manufacture_year"
+  }
+]
