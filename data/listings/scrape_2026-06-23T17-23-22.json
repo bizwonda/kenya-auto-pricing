@@ -1,0 +1,18 @@
+[
+  {
+    "engine_cc": null,
+    "location": null,
+    "make": "Toyota",
+    "mileage_km": null,
+    "model": "My",
+    "price_kes": null,
+    "price_usd": null,
+    "scraped_at": "2026-06-23T17:21:31.613Z",
+    "source": "SBT Japan",
+    "source_key": "sbt",
+    "title": "My amaizing Toyota Camry 2015",
+    "transmission": null,
+    "url": "https://www.sbtjapan.com/used-cars/DAE3973?country=26&port=52&shipment=1&currency=usd&freight=0&inspection=1&insurance=1",
+    "year": 2015
+  }
+]
