@@ -1,0 +1,5 @@
+source,make,model,year,mileage_km,engine_cc,transmission,price_kes,price_usd,location,url,scraped_at
+SBT Japan,Mazda,CX5,,,,,,,,https://www.sbtjapan.com/used-cars/search?make_id%5B%5D=2&model%5B%5D=CAMRY%2CCOROLLA+AXIO%2CCOROLLA+FIELDER&year__from=2020&is_new_available=0&country=26&port=52&shipment=1&currency=usd&freight=0&inspection=yes&insurance=yes&s=manufacture_year,2026-06-24T06:00:58.875Z
+SBT Japan,Toyota,Unknown,,,,,,,,https://www.sbtjapan.com/,2026-06-24T06:03:01.577Z
+SBT Japan,Mazda,CX5,,,,,,,,https://www.sbtjapan.com/used-cars/search?make_id=5&model%5B%5D=CX5&isModel=1,2026-06-24T06:03:14.729Z
+SBT Japan,Mazda,CX5,,,,,,,,https://www.sbtjapan.com/used-cars/search?make_id%5B%5D=5&model%5B%5D=CX5&year__from=2020&is_new_available=0&country=26&port=52&shipment=1&currency=usd&freight=0&inspection=yes&insurance=yes&isModel=1,2026-06-24T06:03:41.117Z
