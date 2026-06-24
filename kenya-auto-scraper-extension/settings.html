@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 400px; min-height: 300px; padding: 24px;
+      font-family: system-ui, sans-serif;
+      background: #0d0d1a; color: #e0e0e0;
+    }
+    h2 { font-size: 16px; margin-bottom: 16px; color: #fff; }
+    label { font-size: 11px; color: #888; display: block; margin-bottom: 4px; margin-top: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+    input, select {
+      width: 100%; padding: 10px 12px; border-radius: 8px;
+      border: 1px solid #2a2a4a; background: #161630;
+      color: #e0e0e0; font-size: 13px; font-family: inherit;
+      outline: none;
+    }
+    input:focus { border-color: #00c853; }
+    .hint { font-size: 10px; color: #555; margin-top: 4px; }
+    button {
+      width: 100%; padding: 12px; margin-top: 16px;
+      background: #00c853; color: #000; border: none;
+      border-radius: 8px; font-size: 14px; font-weight: 600;
+      cursor: pointer; font-family: inherit;
+    }
+    button:hover { background: #00e676; }
+    .status { font-size: 11px; margin-top: 10px; text-align: center; min-height: 16px; }
+    .status.good { color: #00c853; }
+    .status.error { color: #ff5252; }
+    a { color: #7c4dff; font-size: 11px; }
+  </style>
+</head>
+<body>
+  <h2>⚙️ GitHub Settings</h2>
+
+  <label>GitHub Personal Access Token</label>
+  <input type="password" id="token" placeholder="ghp_..." />
+  <div class="hint">
+    Needs <b>repo</b> + <b>workflow</b> scopes.
+    <a href="https://github.com/settings/tokens/new" target="_blank">Create token →</a>
+  </div>
+
+  <label>Repository</label>
+  <input type="text" id="repo" placeholder="bizwonda/kenya-auto-pricing" />
+
+  <label>Branch</label>
+  <input type="text" id="branch" placeholder="main" />
+
+  <button id="saveBtn">💾 Save Settings</button>
+  <div class="status" id="status"></div>
+
+  <button id="testBtn" style="background:#1e1e3a;color:#ccc;margin-top:8px;font-size:12px">
+    🔗 Test GitHub Connection
+  </button>
+
+  <script src="settings.js"></script>
+</body>
+</html>

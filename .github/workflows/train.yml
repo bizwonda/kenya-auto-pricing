@@ -1,6 +1,9 @@
 name: Train Pricing Model
 
 on:
+  push:
+    paths:
+      - "data/listings/**"
   workflow_run:
     workflows: ["Scrape Vehicle Data"]
     types: [completed]

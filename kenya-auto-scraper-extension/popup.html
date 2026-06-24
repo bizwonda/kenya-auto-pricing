@@ -94,15 +94,21 @@
   </div>
 
   <button class="btn btn-primary" id="scrapeBtn">🔍 Scrape Current Page</button>
+  <button class="btn btn-primary" id="uploadBtn" style="background:#7c4dff;margin-top:4px">☁️ Upload to GitHub & Train</button>
 
   <div class="actions">
     <button class="btn btn-secondary" id="exportJson">📦 Export JSON</button>
     <button class="btn btn-secondary" id="exportCsv">📊 Export CSV</button>
   </div>
-  <button class="btn btn-danger" id="clearBtn">🗑 Clear All Data</button>
+
+  <div class="actions">
+    <button class="btn btn-secondary" id="settingsBtn" style="font-size:11px">⚙️ Settings</button>
+    <button class="btn btn-danger" id="clearBtn" style="font-size:11px">🗑 Clear</button>
+  </div>
 
   <div class="status" id="status"></div>
 
+  <script src="lib/github.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>

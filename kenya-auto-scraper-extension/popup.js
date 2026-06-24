@@ -151,7 +151,42 @@ el("exportCsv").addEventListener("click", async () => {
   el("status").className = "good";
 });
 
-// --- Clear ---
+// --- Upload to GitHub ---
+el("uploadBtn").addEventListener("click", async () => {
+  el("status").textContent = "Uploading to GitHub...";
+  el("status").className = "";
+  el("uploadBtn").disabled = true;
+  el("uploadBtn").textContent = "⏳ Uploading...";
+
+  try {
+    const { listings = [] } = await chrome.storage.local.get({ listings: [] });
+    if (listings.length === 0) {
+      el("status").textContent = "No data to upload";
+      return;
+    }
+
+    const result = await pushToGitHub(listings);
+    el("status").textContent = `✅ Uploaded ${result.count} listings to GitHub`;
+    el("status").className = "good";
+
+    // Trigger training
+    el("status").textContent += " | Starting model training...";
+    const trained = await triggerTraining();
+    if (trained) {
+      el("status").textContent = `✅ ${result.count} listings uploaded + training started`;
+    }
+  } catch (e) {
+    el("status").textContent = `❌ ${e.message}`;
+  } finally {
+    el("uploadBtn").disabled = false;
+    el("uploadBtn").textContent = "☁️ Upload to GitHub & Train";
+  }
+});
+
+// --- Settings ---
+el("settingsBtn").addEventListener("click", () => {
+  chrome.runtime.openOptionsPage();
+});
 el("clearBtn").addEventListener("click", async () => {
   if (!confirm("Delete all collected listings?")) return;
 
